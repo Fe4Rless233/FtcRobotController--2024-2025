@@ -28,9 +28,13 @@ public class teleop extends OpMode {
     // You can tune this value to be faster or slower. A smaller value is slower.
     final double ARM_SPEED = 0.01;
 
+    // This is a speed multiplier for the drivetrain.
+    // 1.0 is full speed, 0.5 is half speed, etc.
+    final double DRIVE_SPEED_MULTIPLIER = 0.5;
+
     // Define servo positions - The values have been swapped here.
     final double ARM_UP_POSITION = 0.15;
-    final double ARM_DOWN_POSITION = 0.96;
+    final double ARM_DOWN_POSITION = 0.98;
     final double CLAW_OPEN_POSITION = 1.0;
     final double CLAW_CLOSED_POSITION = 0.0;
 
@@ -70,10 +74,11 @@ public class teleop extends OpMode {
     @Override
     public void loop() {
         // --- DRIVETRAIN CONTROLS ---
-        double drive = gamepad1.left_stick_y;
-        double strafe = gamepad1.left_stick_x;
+        // The joystick values are multiplied by the speed multiplier to reduce the robot's speed.
+        double drive = gamepad1.left_stick_y * DRIVE_SPEED_MULTIPLIER;
+        double strafe = gamepad1.left_stick_x * DRIVE_SPEED_MULTIPLIER;
         // CORRECTED: The negative sign inverts the turning controls to match expectations.
-        double turn = -gamepad1.right_stick_x;
+        double turn = -gamepad1.right_stick_x * DRIVE_SPEED_MULTIPLIER;
 
         // Calculate the power for each motor
         double leftFrontPower = drive + strafe + turn;
